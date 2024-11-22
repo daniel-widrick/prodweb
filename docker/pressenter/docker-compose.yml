@@ -1,0 +1,22 @@
+
+
+networks:
+  mariadb:
+    external: true
+
+services:
+  pressenter_wordpress:
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    container_name: pressenter-wp
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: pressenter
+      WORDPRESS_DB_NAME: pressenter_wp
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: wp_
+

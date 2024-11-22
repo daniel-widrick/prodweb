@@ -9,3 +9,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
+    container_name: mariadb
+networks:
+  mariadb:
+    driver: local

@@ -1,0 +1,44 @@
+
+
+networks:
+  modwp:
+    driver: local
+
+services:
+  mod_wordpress_phpfpm:
+    network: modwp
+    environment:
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: modguild
+      WORDPRESS_DB_NAME: modguild
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_TABLE_PREFIX: wp_
+      DOCKER_COMPOSE_YML_LOCAION: ${pwd}
+    volumes:
+      - ./_data:/var/www/html
+      - ./wordpress.ini:/usr/local/etc/php/conf.d/wordpress.ini
+    container_name: modguild_phpfpm
+    build:
+      context: ./docker/php
+  mod_wordpress_nginx:
+    network: modwp
+    image: nginx:latest
+    environment:
+      UID: 33
+      GID: 33
+      command:
+        - /bin/sh
+        - -c
+        - |
+          usermod -u $${UID} nginx
+          groupmod -g ${{GID} nginx
+          /docker-entrypoint.sh nginx -g 'daemon off'
+      ports:
+        - "8001:80"
+      volumes:
+        - ./_data:/var/www/html
+        - ./wordpress_nginx:/etc/nginx/conf.d/default:ro
+        - nginx_cache:/var/cache/nginx
+        - ./nginx.pid:/var/run
+volumes:
+  nginx_cache:
