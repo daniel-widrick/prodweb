@@ -1,9 +1,4 @@
 
-
-networks:
-  mariadb:
-    external: true
-
 services:
   pressenter_wordpress:
     image: wordpress:latest
@@ -19,4 +14,9 @@ services:
       WORDPRESS_DB_NAME: pressenter_wp
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       WORDPRESS_TABLE_PREFIX: wp_
-
+      WORDPRESS_DEBUG: 0
+    networks:
+      - mariadb
+networks:
+  mariadb:
+    external: true
