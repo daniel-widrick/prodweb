@@ -8,6 +8,7 @@ source .env
 mkdir -p /opt/docker/system
 cp /etc/wireguard/wg0.conf /opt/docker/system
 cp /etc/iptables/rules.v4 /opt/docker/system
+cp /etc/ssh/sshd_config /opt/docker/system
 
 #Prepare Backup
 mkdir -p /opt/docker-backup
@@ -16,3 +17,6 @@ zpaq a /opt/docker-backup/backup.zpaq /opt/docker
 
 backblaze-b2 authorize-account ${bcred1} ${bcred2}
 backblaze-b2 upload-file --noProgress HeroWellHorizon /opt/docker-backup/backup.zpaq ${filename}
+
+#cleanup
+rm -rf /opt/docker/system

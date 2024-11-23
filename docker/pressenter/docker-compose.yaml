@@ -2,8 +2,6 @@
 services:
   pressenter_wordpress:
     image: wordpress:latest
-    ports:
-      - "8000:80"
     restart: always
     volumes:
       - ./wp-content:/var/www/html/wp-content
@@ -17,6 +15,9 @@ services:
       WORDPRESS_DEBUG: 0
     networks:
       - mariadb
+      - proxy
 networks:
   mariadb:
+    external: true
+  proxy:
     external: true
