@@ -6,7 +6,8 @@ apt update && apt upgrade -y
 reboot
 
 #Harden Host
-apt install -y iptables iptables-persistent cronie vim net-tools
+apt install -y iptables iptables-persistent cronie vim net-tools iputils-ping \
+	wireguard wireguard-tools zpaq backblaze-b2
 cat > /etc/iptables/rules.v4 <<EOF
 > *filter
 :INPUT DROP [0:0]
@@ -39,6 +40,7 @@ timedatectl set-timezone America/New_York
 echo '0   5  *  *  0     root     reboot' >> /etc/crontab
 echo '30  4  *  *  0     root     apt update -y && apt upgrade -y' >> /etc/crontab
 echo '0   3  *  *  1     root     /bin/bash /opt/docker/mariadb/backup.sh' >> /etc/crontab
+echo '0   7  *  *  1     root     /root/prodweb/backup.sh' >> /etc/crontab
 
 systemctl enable --now cronie
 
